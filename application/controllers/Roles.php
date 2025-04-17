@@ -99,6 +99,50 @@ class Roles extends BaseController
     /**
      * This function is used to add new user to the system
      */
+    public function addModule() {
+        
+        $this->global['pageTitle'] = 'Muevos Modulos';
+        $data['roles'] = $this->rm->getActiveRoles(); // Obtenemos los roles activos
+        $data['menuModules'] = $this->rm->getMenuModules(); // Carga los módulos desde la tabla 'menu'
+        $this->loadViews("roles/add_module", $this->global,$data);
+         }
+
+     public function processAddModule() {
+        // Obtener datos del formulario (POST)
+        $roleId = $this->input->post('roleId'); // ID del rol
+        $moduleName = $this->input->post('moduleName'); // Nombre del módulo
+        $permissions = $this->input->post('permissions'); // Permisos (total_access, list, etc.)
+
+        // Crear el arreglo para el nuevo módulo
+        $newModule = [
+            "module" => $moduleName,
+            "total_access" => $permissions['total_access'],
+            "list" => $permissions['list'],
+            "create_records" => $permissions['create_records'],
+            "edit_records" => $permissions['edit_records'],
+            "delete_records" => $permissions['delete_records']
+        ];
+
+        // Llamar al método del modelo para agregar el módulo
+        $result = $this->rm->addModuleToAccessMatrix($roleId, $newModule);
+
+        // Manejar la respuesta
+        if (is_numeric($result)) {
+            $this->session->set_flashdata('success', '¡Módulo agregado exitosamente!');
+        } else {
+            $this->session->set_flashdata('error', $result); // Mensaje de error
+        }
+
+        // Redirigir a la página de administración de roles
+        redirect('roles/manage');
+    }
+    public function manage() {
+        // Cargar datos necesarios para la vista
+        $data['roles'] = $this->rm->getAllRoles(); // Método para obtener roles
+
+        // Renderizar la vista
+        $this->load->view('roles/manage', $data); // Asegúrate de que la vista exista
+    }
     function addNewRole()
     {
         if(!$this->isAdmin())
@@ -203,7 +247,7 @@ class Roles extends BaseController
                 
                 if($result == true)
                 {
-                    $this->session->set_flashdata('success', 'Role updated successfully');
+                    $this->session->set_flashdata('success', 'Role Actualizado exitosamente');
                 }
                 else
                 {
@@ -261,7 +305,7 @@ class Roles extends BaseController
         $updated = $this->rm->updateAccessMatrix($roleId, $accessMatrix);
 
         if($updated){
-            $this->session->set_flashdata('success', 'Access matrix updated successfully');
+            $this->session->set_flashdata('success', 'Access matrix Actualizado exitosamente');
         } else {
             $this->session->set_flashdata('error', 'Access matrix updation failed');
         }

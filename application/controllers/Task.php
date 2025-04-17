@@ -179,7 +179,7 @@ class Task extends BaseController
                 
                 if($result == true)
                 {
-                    $this->session->set_flashdata('success', 'Task updated successfully');
+                    $this->session->set_flashdata('success', 'Task Actualizado exitosamente');
                 }
                 else
                 {

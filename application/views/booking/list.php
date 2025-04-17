@@ -53,7 +53,7 @@
                     <div class="box-tools">
                         <form action="<?php echo base_url() ?>booking/bookingListing" method="POST" id="searchList">
                             <div class="input-group">
-                              <input type="text" name="searchText" value="<?php echo $searchText; ?>" class="form-control input-sm pull-right" style="width: 150px;" placeholder="Search"/>
+                              <input type="text" name="searchText" value="<?php echo $searchText; ?>" class="form-control input-sm pull-right" style="width: 150px;" placeholder="Buscar"/>
                               <div class="input-group-btn">
                                 <button class="btn btn-sm btn-default searchList"><i class="fa fa-search"></i></button>
                               </div>
@@ -98,13 +98,7 @@
             </div>
         </div>
     </section>
-    <section class="content">
-      <div class="row">
-        <div class="col-md-12">
-          <h3>Modules <span style="color:red"> "Booking" </span> & <span style="color:red"> "Tasks" </span> created to demonstrate Roles Access.</h3>
-        </div>
-      </div>
-    </section>
+   
 </div>
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/common.js" charset="utf-8"></script>
 <script type="text/javascript">

@@ -27,6 +27,10 @@ class Role_model extends CI_Model
         
         return $query->num_rows();
     }
+    public function getMenuItems() {
+        $this->db->where('is_active', 1); // Solo menús activos
+        return $this->db->get('menu')->result_array();
+    }
     
     /**
      * This function is used to get the role listing count
@@ -259,7 +263,70 @@ class Role_model extends CI_Model
         $this->db->update('tbl_access_matrix', $accessMatrix);
 
         return $this->db->affected_rows();
+    } 
+    /////////////nuevo henry
+    public function getAllRoles() {
+        // Consulta para obtener todos los roles
+        $this->db->select('*');
+        $this->db->from('tbl_roles'); // Asegúrate de que esta sea tu tabla de roles
+        $query = $this->db->get();
+
+        return $query->result_array(); // Devolver los resultados como un array
     }
+    public function getActiveRoles() {
+        $this->db->select('roleId, role');
+        $this->db->from('tbl_roles');
+        $this->db->where('status', 1);
+        $this->db->where('isDeleted', 0);
+        $query = $this->db->get();
+    
+        return $query->result_array(); // Devuelve un array de roles
+    }
+
+    public function getMenuModules() {
+        $this->db->select('id, title'); // Ajusta 'moduleName' al nombre real de la columna en tu tabla
+        $this->db->from('menu'); // Asegúrate de que 'menu' es el nombre correcto de la tabla
+        $this->db->where('is_active', 1); // Filtra los módulos activos (si aplica)
+        $query = $this->db->get();
+    
+        return $query->result_array(); // Devuelve un arreglo de resultados
+    }
+    
+    function addModuleToAccessMatrix($roleId, $newModule) {
+        // Obtener el registro actual para el rol
+        $this->db->select('access');
+        $this->db->from('tbl_access_matrix');
+        $this->db->where('roleId', $roleId);
+        $query = $this->db->get();
+        $result = $query->row();
+    
+        if ($result) {
+            // Decodificar el JSON existente
+            $accessMatrix = json_decode($result->access, true);
+    
+            // Verificar si el módulo ya existe
+            foreach ($accessMatrix as $module) {
+                if ($module['module'] === $newModule['module']) {
+                    return "El módulo ya existe en el acceso."; // Evitar redundancia
+                }
+            }
+    
+            // Si el módulo no existe, agregarlo
+            $accessMatrix[] = $newModule;
+    
+            // Actualizar la base de datos con el nuevo JSON
+            $this->db->where('roleId', $roleId);
+            $this->db->update('tbl_access_matrix', ['access' => json_encode($accessMatrix)]);
+    
+            return $this->db->affected_rows() > 0 
+                ? "Módulo agregado exitosamente." 
+                : "Error al actualizar los permisos.";
+        } else {
+            return "No se encontró el registro para el rol especificado.";
+        }
+    }
+    
+    
 }
 
   

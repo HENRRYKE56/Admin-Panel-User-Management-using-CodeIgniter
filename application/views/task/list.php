@@ -2,15 +2,15 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        <i class="fa fa-user-circle-o" aria-hidden="true"></i> Task Management
-        <small>Add, Edit, Delete</small>
+        <i class="fa fa-user-circle-o" aria-hidden="true"></i> GESTIÓN DE TAREAS 
+        <small>Agregar, Editar, Eliminar</small>
       </h1>
     </section>
     <section class="content">
         <div class="row">
             <div class="col-xs-12 text-right">
                 <div class="form-group">
-                    <a class="btn btn-primary" href="<?php echo base_url(); ?>task/add"><i class="fa fa-plus"></i> Add New task</a>
+                    <a class="btn btn-primary" href="<?php echo base_url(); ?>task/add"><i class="fa fa-plus"></i> AGREGAR NUEVAS TAREAS</a>
                 </div>
             </div>
         </div>
@@ -49,11 +49,11 @@
             <div class="col-xs-12">
               <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">task List</h3>
+                    <h3 class="box-title">LISTA DE TAREAS</h3>
                     <div class="box-tools">
                         <form action="<?php echo base_url() ?>task/taskListing" method="POST" id="searchList">
                             <div class="input-group">
-                              <input type="text" name="searchText" value="<?php echo $searchText; ?>" class="form-control input-sm pull-right" style="width: 150px;" placeholder="Search"/>
+                              <input type="text" name="searchText" value="<?php echo $searchText; ?>" class="form-control input-sm pull-right" style="width: 150px;" placeholder="Buscar"/>
                               <div class="input-group-btn">
                                 <button class="btn btn-sm btn-default searchList"><i class="fa fa-search"></i></button>
                               </div>
@@ -64,10 +64,10 @@
                 <div class="box-body table-responsive no-padding">
                   <table class="table table-hover">
                     <tr>
-                        <th>Task Title</th>
-                        <th>Description</th>
-                        <th>Created On</th>
-                        <th class="text-center">Actions</th>
+                        <th>TAREAS Title</th>
+                        <th>DESCRIPCIÓN</th>
+                        <th>CREADO</th>
+                        <th class="text-center">ACCIONES</th>
                     </tr>
                     <?php
                     if(!empty($records))
@@ -98,13 +98,7 @@
             </div>
         </div>
     </section>
-    <section class="content">
-      <div class="row">
-        <div class="col-md-12">
-          <h3>Modules <span style="color:red"> "Booking" </span> & <span style="color:red"> "Tasks" </span> created to demonstrate Roles Access.</h3>
-        </div>
-      </div>
-    </section>
+    
 </div>
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/common.js" charset="utf-8"></script>
 <script type="text/javascript">

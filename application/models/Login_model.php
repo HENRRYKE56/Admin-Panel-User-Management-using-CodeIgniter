@@ -15,6 +15,12 @@ class Login_model extends CI_Model
      * @param string $email : This is email of the user
      * @param string $password : This is encrypted password of the user
      */
+    public function getUserPermissions($roleId) {
+        $this->db->select('access'); // Columna que contiene el JSON
+        $this->db->where('roleId', $roleId);
+        $result = $this->db->get('tbl_access_matrix')->row_array();
+        return isset($result['access']) ? json_decode($result['access'], true) : [];
+    }
     function loginMe($email, $password)
     {
         $this->db->select('BaseTbl.userId, BaseTbl.password, BaseTbl.name, BaseTbl.roleId, BaseTbl.isAdmin, 
@@ -145,6 +151,27 @@ class Login_model extends CI_Model
      * This function used to get access matrix of a role by roleId
      * @param number $roleId : This is roleId of user
      */
+    public function getMenuItems() {
+        $this->db->where('is_active', 1); // Solo elementos activos
+         return $this->db->get('menu')->result_array();
+    }
+    function userListingCount($searchText)
+    {
+        $this->db->select('BaseTbl.userId, BaseTbl.email, BaseTbl.name, BaseTbl.mobile, BaseTbl.isAdmin, BaseTbl.createdDtm, Role.role');
+        $this->db->from('tbl_users as BaseTbl');
+        $this->db->join('tbl_roles as Role', 'Role.roleId = BaseTbl.roleId','left');
+        if(!empty($searchText)) {
+            $likeCriteria = "(BaseTbl.email  LIKE '%".$searchText."%'
+                            OR  BaseTbl.name  LIKE '%".$searchText."%'
+                            OR  BaseTbl.mobile  LIKE '%".$searchText."%')";
+            $this->db->where($likeCriteria);
+        }
+        $this->db->where('BaseTbl.isDeleted', 0);
+        // $this->db->where('BaseTbl.roleId !=', 1);
+        $query = $this->db->get();
+        
+        return $query->num_rows();
+    }
     function getRoleAccessMatrix($roleId)
     {
         $this->db->select('roleId, access');

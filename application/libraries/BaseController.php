@@ -17,12 +17,15 @@ class BaseController extends CI_Controller {
 	protected $global = array ();
 	protected $lastLogin = '';
 	protected $module = '';
+	protected $menu = [];
 
 	/**
 	 * This is default constructor
 	 */
 	public function __construct() {
 		parent::__construct();
+		$this->load->model('user_model');
+     
 	}
 	
 	/**
@@ -41,7 +44,8 @@ class BaseController extends CI_Controller {
 			$this->lastLogin = $this->session->userdata ( 'lastLogin' );
 			$this->isAdmin = $this->session->userdata ( 'isAdmin' );
 			$this->accessInfo = $this->session->userdata ( 'accessInfo' );
-			
+			$this->menu =$this->session->userdata ( 'menu' );;
+			$this->global ['menu'] = $this->menu;
 			$this->global ['name'] = $this->name;
 			$this->global ['role'] = $this->role;
 			$this->global ['role_text'] = $this->roleText;
@@ -63,8 +67,8 @@ class BaseController extends CI_Controller {
 	}
 
 	/**
-	 * This function is used to check the user having list access or not
-	 */
+ * Esta función se utiliza para verificar si el usuario tiene acceso a la lista o no
+ */
 	protected function hasListAccess() {
 		if ($this->isAdmin() ||
 			(array_key_exists($this->module, $this->accessInfo) 
@@ -123,7 +127,8 @@ class BaseController extends CI_Controller {
 	 */
 	function loadThis() {
 		$this->global ['pageTitle'] = 'CodeInsect : Access Denied';
-		
+		$this->global['menu'] = $this->getMenu(); // Obtenemos el menú dinámico
+   
 		$this->load->view ( 'includes/header', $this->global );
 		$this->load->view ( 'general/access' );
 		$this->load->view ( 'includes/footer' );
@@ -136,6 +141,27 @@ class BaseController extends CI_Controller {
 		$this->session->sess_destroy ();
 		redirect ( 'login' );
 	}
+	public function getMenuItems() {
+        $this->db->where('is_active', 1); // Solo elementos activos
+        return $this->db->get('menu')->result_array();
+    }
+    function userListingCount($searchText)
+    {
+        $this->db->select('BaseTbl.userId, BaseTbl.email, BaseTbl.name, BaseTbl.mobile, BaseTbl.isAdmin, BaseTbl.createdDtm, Role.role');
+        $this->db->from('tbl_users as BaseTbl');
+        $this->db->join('tbl_roles as Role', 'Role.roleId = BaseTbl.roleId','left');
+        if(!empty($searchText)) {
+            $likeCriteria = "(BaseTbl.email  LIKE '%".$searchText."%'
+                            OR  BaseTbl.name  LIKE '%".$searchText."%'
+                            OR  BaseTbl.mobile  LIKE '%".$searchText."%')";
+            $this->db->where($likeCriteria);
+        }
+        $this->db->where('BaseTbl.isDeleted', 0);
+        // $this->db->where('BaseTbl.roleId !=', 1);
+        $query = $this->db->get();
+        
+        return $query->num_rows();
+    }
 
 	/**
      * This function used to load views

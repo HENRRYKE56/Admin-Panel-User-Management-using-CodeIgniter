@@ -3,13 +3,13 @@
 require APPPATH . '/libraries/BaseController.php';
 
 /**
- * Class : Booking (BookingController)
- * Booking Class to control booking related operations.
+ * Class : Task (TaskController)
+ * Task Class to control task related operations.
  * @author : Kishor Mali
  * @version : 1.5
- * @since : 18 Jun 2022
+ * @since : 19 Jun 2022
  */
-class Booking extends BaseController
+class Reporte extends BaseController
 {
     /**
      * This is default constructor of the class
@@ -17,9 +17,9 @@ class Booking extends BaseController
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('Booking_model', 'bm');
+        $this->load->model('Task_model', 'tm');
         $this->isLoggedIn();
-        $this->module = 'Booking';
+        $this->module = 'Task';
     }
 
     /**
@@ -28,20 +28,20 @@ class Booking extends BaseController
      */
     public function index()
     {
-        redirect('booking/bookingListing');
+        redirect('reporte/reporteListing');
     }
     
     /**
-     * This function is used to load the booking list
+     * This function is used to load the task list
      */
-    function bookingListing()
+    function reporteListing()
     {
         if(!$this->hasListAccess())
         {
             $this->loadThis();
         }
         else
-        {
+        {        
             $searchText = '';
             if(!empty($this->input->post('searchText'))) {
                 $searchText = $this->security->xss_clean($this->input->post('searchText'));
@@ -50,15 +50,15 @@ class Booking extends BaseController
             
             $this->load->library('pagination');
             
-            $count = $this->bm->bookingListingCount($searchText);
+            $count = $this->tm->taskListingCount($searchText);
 
-			$returns = $this->paginationCompress ( "bookingListing/", $count, 10 );
+			$returns = $this->paginationCompress ( "taskListing/", $count, 10 );
             
-            $data['records'] = $this->bm->bookingListing($searchText, $returns["page"], $returns["segment"]);
+            $data['records'] = $this->tm->taskListing($searchText, $returns["page"], $returns["segment"]);
             
-            $this->global['pageTitle'] = 'CodeInsect : Booking';
+            $this->global['pageTitle'] = 'CodeInsect : Task';
             
-            $this->loadViews("booking/list", $this->global, $data, NULL);
+            $this->loadViews("task/list", $this->global, $data, NULL);
         }
     }
 
@@ -73,16 +73,16 @@ class Booking extends BaseController
         }
         else
         {
-            $this->global['pageTitle'] = 'CodeInsect : Add New Booking';
+            $this->global['pageTitle'] = 'CodeInsect : Add New Task';
 
-            $this->loadViews("booking/add", $this->global, NULL, NULL);
+            $this->loadViews("task/add", $this->global, NULL, NULL);
         }
     }
     
     /**
      * This function is used to add new user to the system
      */
-    function addNewBooking()
+    function addNewTask()
     {
         if(!$this->hasCreateAccess())
         {
@@ -92,7 +92,7 @@ class Booking extends BaseController
         {
             $this->load->library('form_validation');
             
-            $this->form_validation->set_rules('roomName','Room Name','trim|callback_html_clean|required|max_length[50]');
+            $this->form_validation->set_rules('taskTitle','Task Title','trim|callback_html_clean|required|max_length[256]');
             $this->form_validation->set_rules('description','Description','trim|callback_html_clean|required|max_length[1024]');
             
             if($this->form_validation->run() == FALSE)
@@ -101,30 +101,30 @@ class Booking extends BaseController
             }
             else
             {
-                $roomName = $this->security->xss_clean($this->input->post('roomName'));
+                $taskTitle = $this->security->xss_clean($this->input->post('taskTitle'));
                 $description = $this->security->xss_clean($this->input->post('description'));
                 
-                $bookingInfo = array('roomName'=>$roomName, 'description'=>$description, 'createdBy'=>$this->vendorId, 'createdDtm'=>date('Y-m-d H:i:s'));
+                $taskInfo = array('taskTitle'=>$taskTitle, 'description'=>$description, 'createdBy'=>$this->vendorId, 'createdDtm'=>date('Y-m-d H:i:s'));
                 
-                $result = $this->bm->addNewBooking($bookingInfo);
+                $result = $this->tm->addNewTask($taskInfo);
                 
                 if($result > 0) {
-                    $this->session->set_flashdata('success', 'New Booking created successfully');
+                    $this->session->set_flashdata('success', 'New Task created successfully');
                 } else {
-                    $this->session->set_flashdata('error', 'Booking creation failed');
+                    $this->session->set_flashdata('error', 'Task creation failed');
                 }
                 
-                redirect('booking/bookingListing');
+                redirect('task/taskListing');
             }
         }
     }
 
     
     /**
-     * This function is used load booking edit information
-     * @param number $bookingId : Optional : This is booking id
+     * This function is used load task edit information
+     * @param number $taskId : Optional : This is task id
      */
-    function edit($bookingId = NULL)
+    function edit($taskId = NULL)
     {
         if(!$this->hasUpdateAccess())
         {
@@ -132,16 +132,16 @@ class Booking extends BaseController
         }
         else
         {
-            if($bookingId == null)
+            if($taskId == null)
             {
-                redirect('booking/bookingListing');
+                redirect('task/taskListing');
             }
             
-            $data['bookingInfo'] = $this->bm->getBookingInfo($bookingId);
+            $data['taskInfo'] = $this->tm->getTaskInfo($taskId);
 
-            $this->global['pageTitle'] = 'CodeInsect : Edit Booking';
+            $this->global['pageTitle'] = 'CodeInsect : Edit Task';
             
-            $this->loadViews("booking/edit", $this->global, $data, NULL);
+            $this->loadViews("task/edit", $this->global, $data, NULL);
         }
     }
     
@@ -149,7 +149,7 @@ class Booking extends BaseController
     /**
      * This function is used to edit the user information
      */
-    function editBooking()
+    function editTask()
     {
         if(!$this->hasUpdateAccess())
         {
@@ -159,34 +159,34 @@ class Booking extends BaseController
         {
             $this->load->library('form_validation');
             
-            $bookingId = $this->input->post('bookingId');
+            $taskId = $this->input->post('taskId');
             
-            $this->form_validation->set_rules('roomName','Room Name','trim|callback_html_clean|required|max_length[50]');
+            $this->form_validation->set_rules('taskTitle','Task Title','trim|callback_html_clean|required|max_length[256]');
             $this->form_validation->set_rules('description','Description','trim|callback_html_clean|required|max_length[1024]');
             
             if($this->form_validation->run() == FALSE)
             {
-                $this->edit($bookingId);
+                $this->edit($taskId);
             }
             else
             {
-                $roomName = $this->security->xss_clean($this->input->post('roomName'));
+                $taskTitle = $this->security->xss_clean($this->input->post('taskTitle'));
                 $description = $this->security->xss_clean($this->input->post('description'));
                 
-                $bookingInfo = array('roomName'=>$roomName, 'description'=>$description, 'updatedBy'=>$this->vendorId, 'updatedDtm'=>date('Y-m-d H:i:s'));
+                $taskInfo = array('taskTitle'=>$taskTitle, 'description'=>$description, 'updatedBy'=>$this->vendorId, 'updatedDtm'=>date('Y-m-d H:i:s'));
                 
-                $result = $this->bm->editBooking($bookingInfo, $bookingId);
+                $result = $this->tm->editTask($taskInfo, $taskId);
                 
                 if($result == true)
                 {
-                    $this->session->set_flashdata('success', 'Booking Actualizado exitosamente');
+                    $this->session->set_flashdata('success', 'TAREA Actualizado exitosamente');
                 }
                 else
                 {
-                    $this->session->set_flashdata('error', 'Booking updation failed');
+                    $this->session->set_flashdata('error', 'TAREA ACTUALIZACIÓN FALLADA');
                 }
                 
-                redirect('booking/bookingListing');
+                redirect('task/taskListing');
             }
         }
     }

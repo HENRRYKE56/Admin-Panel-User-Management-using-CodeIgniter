@@ -42,15 +42,15 @@
         <!-- Logo -->
         <a href="<?php echo base_url(); ?>" class="logo">
           <!-- mini logo for sidebar mini 50x50 pixels -->
-          <span class="logo-mini"><b>CI</b>AS</span>
+          <span class="logo-mini"><b>SE</b>IM</span>
           <!-- logo for regular state and mobile devices -->
-          <span class="logo-lg"><b>CodeInsect</b>AS</span>
+          <span class="logo-lg"><b>SEIEM</b> EDOMEX</span>
         </a>
         <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top" role="navigation">
           <!-- Sidebar toggle button-->
           <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
-            <span class="sr-only">Toggle navigation</span>
+            <span class="sr-only">Alternar navegación</span>
           </a>
           <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
@@ -59,13 +59,13 @@
                   <i class="fa fa-history"></i>
                 </a>
                 <ul class="dropdown-menu">
-                  <li class="header"> Last Login : <i class="fa fa-clock-o"></i> <?= empty($last_login) ? "First Time Login" : $last_login; ?></li>
+                  <li class="header">Último acceso : <i class="fa fa-clock-o"></i> <?= empty($last_login) ? "First Time Login" : $last_login; ?></li>
                 </ul>
               </li>
               <!-- User Account: style can be found in dropdown.less -->
               <li class="dropdown user user-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                  <img src="<?php echo base_url(); ?>assets/dist/img/avatar.png" class="user-image" alt="User Image"/>
+                  <img src="<?php echo base_url(); ?>assets/dist/img/avatar.png" class="user-image" alt="Imagen del Usuario"/>
                   <span class="hidden-xs"><?php echo $name; ?></span>
                 </a>
                 <ul class="dropdown-menu">
@@ -82,10 +82,10 @@
                   <!-- Menu Footer-->
                   <li class="user-footer">
                     <div class="pull-left">
-                      <a href="<?php echo base_url(); ?>profile" class="btn btn-warning btn-flat"><i class="fa fa-user-circle"></i> Profile</a>
+                      <a href="<?php echo base_url(); ?>profile" class="btn btn-warning btn-flat"><i class="fa fa-user-circle"></i> Perfil</a>
                     </div>
                     <div class="pull-right">
-                      <a href="<?php echo base_url(); ?>logout" class="btn btn-default btn-flat"><i class="fa fa-sign-out"></i> Sign out</a>
+                      <a href="<?php echo base_url(); ?>logout" class="btn btn-default btn-flat"><i class="fa fa-sign-out"></i> Cerrar Sesión</a>
                     </div>
                   </li>
                 </ul>
@@ -98,48 +98,19 @@
       <aside class="main-sidebar">
         <!-- sidebar: style can be found in sidebar.less -->
         <section class="sidebar">
+          
+       
+        <ul class="sidebar-menu" data-widget="tree">
+  
+</ul>
+
           <!-- sidebar menu: : style can be found in sidebar.less -->
           <ul class="sidebar-menu" data-widget="tree">
-            <li class="header">MAIN NAVIGATION</li>
-            <li>
-              <a href="<?php echo base_url(); ?>dashboard">
-                <i class="fa fa-dashboard"></i> <span>Dashboard</span></i>
-              </a>
-            </li>
-            <li class="treeview">
-              <a href="#">
-                <i class="fa fa-share"></i> <span>Multilevel</span>
-                <span class="pull-right-container">
-                  <i class="fa fa-angle-left pull-right"></i>
-                </span>
-              </a>
-              <ul class="treeview-menu">
-                <li><a href="#"><i class="fa fa-circle-o"></i> Level One</a></li>
-                <li class="treeview">
-                  <a href="#"><i class="fa fa-circle-o"></i> Level One
-                    <span class="pull-right-container">
-                      <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                  </a>
-                  <ul class="treeview-menu">
-                    <li><a href="#"><i class="fa fa-circle-o"></i> Level Two</a></li>
-                    <li class="treeview">
-                      <a href="#"><i class="fa fa-circle-o"></i> Level Two
-                        <span class="pull-right-container">
-                          <i class="fa fa-angle-left pull-right"></i>
-                        </span>
-                      </a>
-                      <ul class="treeview-menu">
-                        <li><a href="#"><i class="fa fa-circle-o"></i> Level Three</a></li>
-                        <li><a href="#"><i class="fa fa-circle-o"></i> Level Three</a></li>
-                      </ul>
-                    </li>
-                  </ul>
-                </li>
-                <li><a href="#"><i class="fa fa-circle-o"></i> Level One</a></li>
-              </ul>
-            </li>
-            <?php
+            <li class="header" align="center"><h5>Menú Princial</h5></li>
+
+            <?php 
+   //  print_r($menu);
+  
             if($is_admin == 1)
             {
             ?>
@@ -167,26 +138,36 @@
             <li>
               <a href="<?php echo base_url(); ?>booking">
                 <i class="fa fa-anchor"></i>
-                <span>Booking</span>
+                <span>Reservación</span>
               </a>
             </li>
               <?php
             }
-            ?>
-            <?php
-            if($is_admin == 1 ||
-                (array_key_exists('Task', $access_info) 
-                && ($access_info['Task']['list'] == 1 || $access_info['Task']['total_access'] == 1)))
+            
+            if($is_admin == 1 ||  (array_key_exists('Task', $access_info)  && ($access_info['Task']['list'] == 1 || $access_info['Task']['total_access'] == 1)))
             {
               ?>
             <li>
               <a href="<?php echo base_url(); ?>task">
                 <i class="fa fa-tasks"></i>
-                <span>Tasks</span>
+                <span>TAREAS</span>
               </a>
             </li>
+            
             <?php
             }
+            if($is_admin == 1 ||  (array_key_exists('Task', $access_info)  && ($access_info['Task']['list'] == 1 || $access_info['Task']['total_access'] == 1)))
+            {
+              ?>
+            <li>
+              <a href="<?php echo base_url(); ?>reporte">
+                <i class="fa fa-tasks"></i>
+                <span>Reporte</span>
+              </a>
+            </li>
+            
+            <?php
+            }   
             ?>
           </ul>
         </section>

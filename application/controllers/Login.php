@@ -47,6 +47,51 @@ class Login extends CI_Controller
     /**
      * This function used to logged in user
      */
+    private function getMenu($permissions) {
+        
+        // Obtener los elementos del menú desde la base de datos
+        $menuItems = $this->login_model->getMenuItems();
+    //  $permissions = $this->login_model->getUserPermissions($user_id);
+
+
+        // Filtrar el menú según los permisos
+    $menuItems = array_filter($menuItems, function($item) use ($permissions) {
+        foreach ($permissions as $permission) {
+            if ($permission['module'] === $item['module'] && $permission['list'] == 1) {
+                return true; // Permitir acceso si el permiso 'list' es 1
+            }
+        }
+        return false;
+    });
+
+    // Construir y devolver el menú
+    return $this->buildMenu($menuItems);
+    }
+    
+    private function buildMenu($items, $parent_id = NULL) {
+        $html = ''; // Contenedor para el HTML del menú
+    
+        foreach ($items as $item) {
+            // Verificar si el elemento pertenece al nivel actual
+            if ($item['parent_id'] == $parent_id) {
+                $html .= '<li >'; // Abrir un elemento de lista
+                $html .= '<a href="' . base_url($item['url']) . '">';
+                $html .= '<i class="' . $item['icon'] . '"></i> <span>' . $item['title'] . '</span>';
+                $html .= '</a>';
+    
+                // Llamada recursiva para submenús
+                $subMenu = $this->buildMenu($items, $item['id']);
+                if (!empty($subMenu)) {
+                    $html .= '<ul class="treeview-menu">' . $subMenu . '</ul>';
+                }
+    
+                $html .= '</li>'; // Cerrar el elemento de lista
+            }
+        }
+    
+        return $html;
+    }
+    
     public function loginMe()
     {
         $this->load->library('form_validation');
@@ -78,6 +123,11 @@ class Login extends CI_Controller
                 $lastLogin = $this->login_model->lastLoginInfo($result->userId);
 
                 $accessInfo = $this->accessInfo($result->roleId);
+                $permissions = $this->login_model->getUserPermissions($result->roleId);
+                $accessInfo = $this->accessInfo($result->roleId);
+              
+                $menu = $this->getMenu($permissions); // Obtenemos el menú dinámico
+              
 
                 $sessionArray = array('userId'=>$result->userId,
                                         'role'=>$result->roleId,
@@ -85,6 +135,7 @@ class Login extends CI_Controller
                                         'name'=>$result->name,
                                         'isAdmin'=>$result->isAdmin,
                                         'accessInfo'=>$accessInfo,
+                                        'menu'=>$menu,
                                         'lastLogin'=> empty($lastLogin->createdDtm) ? '' : $lastLogin->createdDtm,
                                         'isLoggedIn' => TRUE
                                 );

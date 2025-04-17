@@ -2,8 +2,9 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        <i class="fa fa-user-circle-o" aria-hidden="true"></i> Task Management
-        <small>Add / Edit Task</small>
+        <i class="fa fa-user-circle-o" aria-hidden="true"></i> GESTIÓN DE TAREAS
+        <small>Agregar, Editar, Eliminar</small>
+    
       </h1>
     </section>
     
@@ -11,12 +12,12 @@
     
         <div class="row">
             <!-- left column -->
-            <div class="col-md-8">
+            <div class="col-md-12">
               <!-- general form elements -->
                 
                 <div class="box box-primary">
                     <div class="box-header">
-                        <h3 class="box-title">Enter Task Details</h3>
+                        <h3 class="box-title">Ingresar detalles de la tarea</h3>
                     </div><!-- /.box-header -->
                     <!-- form start -->
                     <?php $this->load->helper("form"); ?>
@@ -25,14 +26,14 @@
                             <div class="row">
                                 <div class="col-md-6">                                
                                     <div class="form-group">
-                                        <label for="taskTitle">Task Title</label>
+                                        <label for="taskTitle">TÍTULO DE LA TAREA</label>
                                         <input type="text" class="form-control required" value="<?php echo set_value('taskTitle'); ?>" id="taskTitle" name="taskTitle" maxlength="256" />
                                     </div>
                                     
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="description">Description</label>
+                                        <label for="description">DESCRIPCIÓN</label>
                                         <textarea class="form-control required" id="description" name="description"></textarea>
                                     </div>
                                 </div>

@@ -92,6 +92,10 @@ $route['createPasswordUser'] = "login/createPasswordUser";
 $route['roleListing'] = "roles/roleListing";
 $route['roleListing/(:num)'] = "roles/roleListing/$1";
 $route['roleListing/(:num)/(:num)'] = "roles/roleListing/$1/$2";
+$route['modulo'] = 'roles/addModule';
+$route['manage'] = 'roles/manage'; // Apunta al controlador Role y su método manage
+
+
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

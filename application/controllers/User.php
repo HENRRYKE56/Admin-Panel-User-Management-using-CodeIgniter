@@ -232,7 +232,7 @@ class User extends BaseController
                 
                 if($result == true)
                 {
-                    $this->session->set_flashdata('success', 'User updated successfully');
+                    $this->session->set_flashdata('success', 'User Actualizado exitosamente');
                 }
                 else
                 {
@@ -356,7 +356,7 @@ class User extends BaseController
             if($result == true)
             {
                 $this->session->set_userdata('name', $name);
-                $this->session->set_flashdata('success', 'Profile updated successfully');
+                $this->session->set_flashdata('success', 'Profile Actualizado exitosamente');
             }
             else
             {
